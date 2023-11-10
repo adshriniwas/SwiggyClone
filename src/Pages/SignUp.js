@@ -2,6 +2,7 @@ import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, FormLa
 import React, { useState } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
 
@@ -192,7 +193,7 @@ const SignUp = () => {
                 <Button type='submit'variant='contained' fullWidth>Sign up</Button>
             </Box>
             <Box display={"flex"} justifyContent={"flex-end"} mt={3}>
-              <a href="/"><Typography fontSize={13}>Already have an account? Sign in</Typography></a>
+              <Link to={"/"}><Typography fontSize={13}>Already have an account? Sign in</Typography></Link>
             </Box>
             
           </Box>

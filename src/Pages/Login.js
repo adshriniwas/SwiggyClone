@@ -131,10 +131,10 @@ const Login = () => {
                 <Grid container pt={3}>
                     <Grid item xs={6}>
                         
-                        <a href="/forgotPassword"><Typography fontSize={13}>Forgot password?</Typography></a>
+                        <Link to={"/forgotPassword"}><Typography fontSize={13}>Forgot password?</Typography></Link>
                     </Grid>
                     <Grid item xs={6}>
-                        <a href="/signup"><Typography fontSize={13}>Dont have an account? Sign up</Typography></a>
+                        <Link to={"/signup"}><Typography fontSize={13}>Dont have an account? Sign up</Typography></Link>
                     </Grid>
                 </Grid>
             </Box>

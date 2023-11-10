@@ -2,6 +2,7 @@ import { Box, Button, Container, Grid, IconButton, InputAdornment, TextField, Ty
 import React, { useState } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom';
 
 const ForgotPass = () => {
 
@@ -120,7 +121,7 @@ const ForgotPass = () => {
                 </Box>
                 <Grid container pt={3}>
                     <Grid item xs={6}>
-                        <a href="/"><Typography fontSize={13}>Go to login page</Typography></a>
+                        <Link to={"/"}><Typography fontSize={13}>Go to login page</Typography></Link>
                     </Grid>
                 </Grid>
             </Box>
