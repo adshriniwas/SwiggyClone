@@ -22,6 +22,11 @@ const SignUp = () => {
   const [isEmailInvalid, setIsEmailInvalid] = useState(false)
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false)
 
+  const [confPasswordDirty, setConfPasswordDirty] = useState(false)
+  const [isConfPassInvalid, setIsConfPassInvalid] = useState(false)
+  const [confShowPass, setConfShowPass] = useState(false)
+  const [confPassword,setConfPassword] = useState("")
+
   const [emailUpdates, setEmailUpdates] = useState(false)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -29,6 +34,25 @@ const SignUp = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleClickConfShowPassword = (e) => {
+    setConfShowPass((show) => !show);
+  }
+
+  const handleConfPassword = (e)=> {
+    setConfPassword(e.target.value)
+    if(e.target.value===""){
+        setConfPasswordDirty(true)
+    }else{
+        setConfPasswordDirty(false)
+    }
+
+    if(e.target.value === password){
+        setIsConfPassInvalid(false)
+    }else{
+        setIsConfPassInvalid(true)
+    }
+  }
 
   const handleFirstName = (e)=>{
     setFirstName(e.target.value)
@@ -75,6 +99,12 @@ const SignUp = () => {
     }else{
         setIsPasswordInvalid(true)
     }
+
+    if(e.target.value === confPassword){
+      setIsConfPassInvalid(false)
+    }else{
+        setIsConfPassInvalid(true)
+    }
   }
 
   const handleGender = (e)=> {
@@ -94,7 +124,7 @@ const SignUp = () => {
     e.preventDefault()
 
       if(firstName==="" || lastName==="" ||
-       email==="" || password==="" || gender==="" || !validateEmail(email) || !validatePassword(password)
+       email==="" || password==="" || gender==="" || !validateEmail(email) || !validatePassword(password) || confPassword!==password
       ){
         if(firstName===""){
           setFirstNameDirty(true)
@@ -111,14 +141,20 @@ const SignUp = () => {
         if(password===""){
           setPasswordDirty(true)
         }
+        if(confPassword===""){
+          setConfPasswordDirty(true)
+        }
         if(!validateEmail(email)){
           setIsEmailInvalid(true)
         }
         if(!validatePassword(password)){
           setIsPasswordInvalid(true)
         }
+        if(confPassword!==password){
+          setIsConfPassInvalid(true)
+        }
       }else{
-        alert("signup")
+        alert("sign up")
       }
       
   }
@@ -148,29 +184,28 @@ const SignUp = () => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 
-                  <TextField variant='outlined' fullWidth label="First name" margin='normal' onChange={handleFirstName} value={firstName}/>
+                  <TextField name='firstName' variant='outlined' fullWidth label="First name" margin='normal' onChange={handleFirstName} value={firstName}/>
                   {firstNameDirty ? <Typography color={"red"}>*FirstName required</Typography> : <></>}
               </Grid>
               <Grid item xs={6}>
-                <TextField variant='outlined' fullWidth label="Last name" margin='normal' onChange={handleLastName} value={lastName}/>
+                <TextField name='lastName' variant='outlined' fullWidth label="Last name" margin='normal' onChange={handleLastName} value={lastName}/>
                 {lastNameDirty ? <Typography color={"red"}>*LastName required</Typography> : <></>}
               </Grid>
             </Grid>
             <Box component={Box} display={"flex"} alignItems={"center"} width={"100%"}>
               <FormLabel component={Typography} mr={3}>Gender</FormLabel>
-              <RadioGroup row onChange={handleGender} value={gender}>
+              <RadioGroup name='gender' row onChange={handleGender} value={gender}>
                 <FormControlLabel control={<Radio/>} value="male" label="Male"/>
                 <FormControlLabel control={<Radio/>} value="female" label="Female"/>
               </RadioGroup>
             </Box>
             {genderDirty ? <Typography color={"red"}>*Gender required</Typography> : <></>}
 
-            <TextField variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email} />
+            <TextField name='email' variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email} />
             {emailDirty ? <Typography color={"red"}>*Email required</Typography> : isEmailInvalid ? <Typography color={"red"}>*Enter Valid Email</Typography> : <></>}
 
-            <TextField variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password"
+            <TextField name='password' variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password" value={password}
               onChange={handlePassword} 
-              value={password}
               InputProps={{
                 endAdornment: <InputAdornment position="end">
                   <IconButton
@@ -185,7 +220,29 @@ const SignUp = () => {
                 </InputAdornment>,
               }}
             />
-            { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Enter Valid Password</Typography> : <></> }
+            { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters</Typography> : <></> }
+
+            
+            <TextField name='confPassword' variant='outlined' type={confShowPass ? "text": "password"} margin='normal'  fullWidth label="Confirm Password" value={confPassword}
+                        onChange={handleConfPassword}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                            <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickConfShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseDownPassword}
+                            edge="end"
+                            >
+                            {confShowPass ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                            </InputAdornment>,
+                        }}
+                    />
+
+                    { confPasswordDirty ? <Typography color={"red"}>*Confirm Password required</Typography> : isConfPassInvalid ? <Typography color={"red"}>*Password must match</Typography> : <></> }
+
+
             <FormControl >
                 <FormControlLabel control={<Checkbox onChange={handleEmailUpdates} value={emailUpdates}  />} label="I want to receive inspiration, marketing promotions and updates via email." />
             </FormControl>

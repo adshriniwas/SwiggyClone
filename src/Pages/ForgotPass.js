@@ -15,7 +15,12 @@ const ForgotPass = () => {
     const [isEmailInvalid, setIsEmailInvalid] = useState(false)
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false)
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [confPasswordDirty, setConfPasswordDirty] = useState(false)
+    const [isConfPassInvalid, setIsConfPassInvalid] = useState(false)
+    const [confShowPass, setConfShowPass] = useState(false)
+    const [confPassword,setConfPassword] = useState("")
 
     const handleClickShowPassword = (e) => {
         setShowPassword((show) => !show);
@@ -24,6 +29,25 @@ const ForgotPass = () => {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    const handleClickConfShowPassword = (e) => {
+        setConfShowPass((show) => !show);
+    }
+
+    const handleConfPassword = (e)=> {
+        setConfPassword(e.target.value)
+        if(e.target.value===""){
+            setConfPasswordDirty(true)
+        }else{
+            setConfPasswordDirty(false)
+        }
+
+        if(e.target.value === password){
+            setIsConfPassInvalid(false)
+        }else{
+            setIsConfPassInvalid(true)
+        }
+    }
 
     const handleEmail = (e)=>{
         setEmail(e.target.value)
@@ -54,22 +78,34 @@ const ForgotPass = () => {
         }else{
             setIsPasswordInvalid(true)
         }
+
+        if(e.target.value === confPassword){
+            setIsConfPassInvalid(false)
+        }else{
+            setIsConfPassInvalid(true)
+        }
     }
 
-    const onLogin = (e)=> {
+    const onForgotPass = (e)=> {
         e.preventDefault()
-        if(email==="" || password==="" || !validateEmail(email) || !validatePassword(password)) {
+        if(email==="" || password==="" || !validateEmail(email) || !validatePassword(password) || confPassword!==password) {
             if(email===""){
                 setEmailDirty(true) 
             }
             if(password===""){
                 setPasswordDirty(true)
             }
+            if(confPassword===""){
+                setConfPasswordDirty(true)
+            }
             if(!validateEmail(email)){
                 setIsEmailInvalid(true)
             }
             if(!validatePassword(password)){
                 setIsPasswordInvalid(true)
+            }
+            if(confPassword!==password){
+                setIsConfPassInvalid(true)
             }
         }else{
             alert("forgot Password")
@@ -94,10 +130,11 @@ const ForgotPass = () => {
             <Box display={'flex'} flexDirection={'column'} pt={10}>
                 <img src='swiggy.png' height={80} width={"100%"}  />
                 <Typography mt={3} align='center' variant='h4'>Forgot Password</Typography>
-                <Box component={"form"} onSubmit={onLogin} >
-                    <TextField variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email}/>
+                <Box component={"form"} onSubmit={onForgotPass} >
+
+                    <TextField name='email' variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email}/>
                         {emailDirty ? <Typography color={"red"}>*Email required</Typography> : isEmailInvalid ? <Typography color={"red"}>*Enter Valid Email</Typography> : <></>}
-                    <TextField variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password" 
+                    <TextField name='password' variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password" value={password}
                         onChange={handlePassword}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">
@@ -113,8 +150,28 @@ const ForgotPass = () => {
                             </InputAdornment>,
                         }}
                     />
-                    { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Enter Valid Password</Typography> : <></> }
+                    { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters</Typography> : <></> }
                     
+
+                    <TextField name='confPassword' variant='outlined' type={confShowPass ? "text": "password"} margin='normal'  fullWidth label="Confirm Password" value={confPassword}
+                        onChange={handleConfPassword}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                            <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickConfShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            onMouseUp={handleMouseDownPassword}
+                            edge="end"
+                            >
+                            {confShowPass ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                            </InputAdornment>,
+                        }}
+                    />
+
+                    { confPasswordDirty ? <Typography color={"red"}>*Confirm Password required</Typography> : isConfPassInvalid ? <Typography color={"red"}>*Password must match</Typography> : <></> }
+
                     <Box mt={4}>
                         <Button type='submit'variant='contained' fullWidth>Reset Password</Button>
                     </Box>

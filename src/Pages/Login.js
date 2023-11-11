@@ -102,9 +102,9 @@ const Login = () => {
                 <img src='swiggy.png' height={80} width={"100%"}  />
                 <Typography mt={3} align='center' variant='h4'>Sign In</Typography>
                 <Box component={"form"} onSubmit={onLogin} >
-                    <TextField variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email}/>
+                    <TextField name='email' variant='outlined' margin='normal'  fullWidth label="Email Address" onChange={handleEmail} value={email}/>
                         {emailDirty ? <Typography color={"red"}>*Email required</Typography> : isEmailInvalid ? <Typography color={"red"}>*Enter Valid Email</Typography> : <></>}
-                    <TextField variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password" 
+                    <TextField name='password' variant='outlined' type={showPassword ? "text": "password"} margin='normal'  fullWidth label="Password" value={password}
                         onChange={handlePassword}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">
@@ -120,7 +120,7 @@ const Login = () => {
                             </InputAdornment>,
                         }}
                     />
-                    { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Enter Valid Password</Typography> : <></> }
+                    { passwordDirty ? <Typography color={"red"}>*Password required</Typography> : isPasswordInvalid ? <Typography color={"red"}>*Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters</Typography> : <></> }
                     <FormControl >
                         <FormControlLabel control={<Checkbox onChange={handleRemember} value={remember} />} label="Remember me" />
                     </FormControl>
