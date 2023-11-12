@@ -1,8 +1,9 @@
 import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useSelector } from 'react-redux';
 
 
 const Login = () => {
@@ -16,7 +17,9 @@ const Login = () => {
     const [isEmailInvalid, setIsEmailInvalid] = useState(false)
     const [isPasswordInvalid, setIsPasswordInvalid] = useState(false)
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const users = useSelector((state)=> state.user)
+    const navigate = useNavigate()
 
     const handleClickShowPassword = (e) => {
         setShowPassword((show) => !show);
@@ -77,7 +80,32 @@ const Login = () => {
                 setIsPasswordInvalid(true)
             }
         }else{
-            alert("login")
+            let match = false
+            let matchEmail = false
+            let name = ""
+            let gender = ""
+            let uEmail = ""
+            let uPass = ""
+
+            users.forEach(user => {
+                if(user.email===email && user.password===password){
+                    match = true
+                    name = user.name
+                    gender = user.gender
+                    uEmail = user.email
+                    uPass = user.password
+                }else if(user.email===email){
+                    matchEmail = true
+                }
+            });
+            if(match){
+                navigate(`/dashboard?name=${name}&gender=${gender}&email=${uEmail}&password=${uPass}`)
+            }else if(matchEmail){
+                alert("password is invalid")
+            }
+            else{
+                alert("email is invalid")
+            }
         }
     }
 

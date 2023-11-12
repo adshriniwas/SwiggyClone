@@ -2,7 +2,9 @@ import { Box, Button, Checkbox, Container, FormControl, FormControlLabel, FormLa
 import React, { useState } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createUser } from '../Store/userSlice';
 
 const SignUp = () => {
 
@@ -28,6 +30,10 @@ const SignUp = () => {
   const [confPassword,setConfPassword] = useState("")
 
   const [emailUpdates, setEmailUpdates] = useState(false)
+
+  const dispatch = useDispatch();
+  const users = useSelector((state)=> state.user)
+  const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -154,7 +160,28 @@ const SignUp = () => {
           setIsConfPassInvalid(true)
         }
       }else{
-        alert("sign up")
+        
+        let unique = false;
+
+        if(users.length===0){
+          dispatch(createUser({name: firstName+" "+lastName, gender: gender, email: email, password: confPassword}))
+          alert("sign up")
+          navigate("/")
+        }else {
+          users.forEach(user => {
+            if(user.email!==email){
+              unique = true;
+            }
+          });
+          if(unique){
+            dispatch(createUser({name: firstName+" "+lastName, gender: gender, email: email, password: confPassword}))
+            alert("sign up")
+            navigate("/")
+          }else{
+            alert("email already exists")
+          }
+        }
+        
       }
       
   }

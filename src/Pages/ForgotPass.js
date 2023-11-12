@@ -2,7 +2,9 @@ import { Box, Button, Container, Grid, IconButton, InputAdornment, TextField, Ty
 import React, { useState } from 'react'
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPassword } from '../Store/userSlice';
 
 const ForgotPass = () => {
 
@@ -21,6 +23,10 @@ const ForgotPass = () => {
     const [isConfPassInvalid, setIsConfPassInvalid] = useState(false)
     const [confShowPass, setConfShowPass] = useState(false)
     const [confPassword,setConfPassword] = useState("")
+
+    const users = useSelector((state)=> state.user)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleClickShowPassword = (e) => {
         setShowPassword((show) => !show);
@@ -108,7 +114,25 @@ const ForgotPass = () => {
                 setIsConfPassInvalid(true)
             }
         }else{
-            alert("forgot Password")
+            
+            if(users.length===0){
+                alert("there are no users available.")
+            }else {
+                let match = false
+                users.forEach(user => {
+                    if(user.email===email){
+                        match = true
+                    }
+                });
+                if(match){
+                    dispatch(resetPassword({email: email, password: confPassword}))
+                    alert("Password successfully reset")
+                    navigate("/")
+                }else {
+                    alert("User not found with given email.")
+                }
+            }
+            
         }
     }
 
