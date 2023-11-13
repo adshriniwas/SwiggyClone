@@ -101,10 +101,10 @@ const Login = () => {
             if(match){
                 navigate(`/dashboard?name=${name}&gender=${gender}&email=${uEmail}&password=${uPass}`)
             }else if(matchEmail){
-                alert("password is invalid")
+                alert("password is wrong")
             }
             else{
-                alert("email is invalid")
+                alert("email is not found")
             }
         }
     }
