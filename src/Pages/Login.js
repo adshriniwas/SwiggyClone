@@ -85,7 +85,7 @@ const Login = () => {
             let name = ""
             let gender = ""
             let uEmail = ""
-            let uPass = ""
+            
 
             users.forEach(user => {
                 if(user.email===email && user.password===password){
@@ -93,13 +93,21 @@ const Login = () => {
                     name = user.name
                     gender = user.gender
                     uEmail = user.email
-                    uPass = user.password
+                    
                 }else if(user.email===email){
                     matchEmail = true
                 }
             });
             if(match){
-                navigate(`/dashboard?name=${name}&gender=${gender}&email=${uEmail}&password=${uPass}`)
+                navigate(`/dashboard`,
+                    {
+                        state: {
+                            name: name,
+                            gender: gender,
+                            email: uEmail
+                        }
+                    }
+                )
             }else if(matchEmail){
                 alert("password is wrong")
             }
@@ -110,8 +118,10 @@ const Login = () => {
     }
 
     const validateEmail = (email) => {
+        const re = '[a-z0-9]+@[a-z]+\.[a-z]{2,3}'
+        
         return email.match(
-          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            re
         );
       };
 
